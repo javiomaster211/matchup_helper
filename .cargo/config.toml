@@ -1,0 +1,2 @@
+[env]
+# This ensures cargo is found in npm scripts

@@ -205,31 +205,39 @@ fn import_matches(count: Option<u32>, state: State<AppState>) -> Result<Vec<Matc
             continue;
         }
 
-        // Get participant info (simplified - in real implementation would need more logic)
-        if let Some(participant) = lcu_match.participants.first() {
-            let result = if participant.stats.win {
-                MatchResult::Win
-            } else {
-                MatchResult::Loss
-            };
+        let result = if lcu_match.win {
+            MatchResult::Win
+        } else {
+            MatchResult::Loss
+        };
 
-            // Note: Champion ID to name mapping would need Data Dragon
-            let new_match = Match::new(
-                format!("Champion{}", participant.champion_id),
-                "Unknown".to_string(),
-                "unknown".to_string(),
-                result,
-                Some(game_id),
-            );
+        let new_match = Match::new(
+            lcu_match.my_champion_name,
+            lcu_match.enemy_champion_name.unwrap_or_else(|| "Unknown".to_string()),
+            lcu_match.role,
+            result,
+            Some(game_id),
+        );
 
-            data.matches.insert(new_match.id.clone(), new_match.clone());
-            imported.push(new_match);
-        }
+        data.matches.insert(new_match.id.clone(), new_match.clone());
+        imported.push(new_match);
     }
 
     storage.save(&data).map_err(|e| e.to_string())?;
 
     Ok(imported)
+}
+
+/// Debug LCU endpoint (for troubleshooting)
+#[tauri::command]
+fn debug_lcu(endpoint: String, state: State<AppState>) -> Result<String, String> {
+    let client = state.lcu_client.lock().map_err(|e| e.to_string())?;
+
+    if !client.is_connected() {
+        return Err("Not connected to League client".to_string());
+    }
+
+    client.debug_endpoint(&endpoint).map_err(|e| e.to_string())
 }
 
 // ==================== Application Entry Point ====================
@@ -250,6 +258,7 @@ pub fn run() {
             update_match,
             connect_lcu,
             import_matches,
+            debug_lcu,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
