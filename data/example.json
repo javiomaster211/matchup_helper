@@ -1,0 +1,36 @@
+{
+  "matchups": {
+    "uuid-example-1": {
+      "id": "uuid-example-1",
+      "my_champion": "Darius",
+      "enemy_champion": "Garen",
+      "role": "top",
+      "versions": [
+        {
+          "version": 1,
+          "date": "2024-02-05T10:00:00Z",
+          "notes": "Tradear nivel 1-2, evitar peleas largas. El Q de Garen le cura mucho si le dejas pegarte sin tradear de vuelta.",
+          "tags": ["easy", "early-game", "short-trades"],
+          "runes": ["Conquistador", "Triunfo", "Leyenda: Tenacidad", "Último Esfuerzo"],
+          "summoner_spells": ["Flash", "Teleport"],
+          "items": ["Hacha del Verdugo rush"]
+        },
+        {
+          "version": 2,
+          "date": "2024-02-10T15:00:00Z",
+          "notes": "Actualizado: mejor ir Ignite para tener kill pressure. El Garen depende mucho de su pasiva así que el antiheal es key.",
+          "tags": ["easy", "early-game", "all-in"],
+          "runes": ["Conquistador", "Triunfo", "Leyenda: Tenacidad", "Último Esfuerzo"],
+          "summoner_spells": ["Flash", "Ignite"],
+          "items": ["Hacha del Verdugo rush", "Botas de Mercurio"]
+        }
+      ],
+      "current_version": 2
+    }
+  },
+  "matches": {},
+  "metadata": {
+    "last_updated": "2024-02-10T15:00:00Z",
+    "version": "1.0"
+  }
+}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MatchupHelper</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <h1>MatchupHelper</h1>
+      <div class="header-actions">
+        <button id="btn-always-on-top" class="icon-btn" title="Always on top">📌</button>
+        <button id="btn-settings" class="icon-btn" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="matchups">Matchups</button>
+      <button class="tab" data-tab="history">Historial</button>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="search-input" placeholder="Buscar matchup... (Ctrl+Shift+M)">
+      <button id="btn-new-matchup" class="btn-primary">+ Nuevo</button>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters">
+      <select id="filter-my-champion">
+        <option value="">Mi Campeón</option>
+      </select>
+      <select id="filter-enemy-champion">
+        <option value="">Campeón Enemigo</option>
+      </select>
+      <select id="filter-role">
+        <option value="">Rol</option>
+        <option value="top">Top</option>
+        <option value="jungle">Jungle</option>
+        <option value="mid">Mid</option>
+        <option value="adc">ADC</option>
+        <option value="support">Support</option>
+      </select>
+      <div class="tag-filters" id="tag-filters"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="content">
+      <!-- Matchups Tab -->
+      <section id="tab-matchups" class="tab-content active">
+        <div id="matchups-list" class="matchups-list">
+          <!-- Matchups will be rendered here -->
+        </div>
+      </section>
+
+      <!-- History Tab -->
+      <section id="tab-history" class="tab-content">
+        <div class="lcu-status" id="lcu-status">
+          <span class="status-indicator disconnected"></span>
+          <span>Cliente de LoL no detectado</span>
+          <button id="btn-connect-lcu" class="btn-secondary">Conectar</button>
+        </div>
+        <div id="history-list" class="history-list">
+          <!-- Match history will be rendered here -->
+        </div>
+      </section>
+    </main>
+
+    <!-- Matchup Detail Modal -->
+    <div id="modal-matchup" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="matchup-champions">
+            <img id="detail-my-champion-icon" class="champion-icon-large" src="" alt="">
+            <span class="vs">vs</span>
+            <img id="detail-enemy-champion-icon" class="champion-icon-large" src="" alt="">
+          </div>
+          <button class="modal-close" id="btn-close-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="matchup-info">
+            <h2 id="detail-title"></h2>
+            <span id="detail-role" class="role-badge"></span>
+          </div>
+
+          <div class="tags-section">
+            <label>Tags:</label>
+            <div id="detail-tags" class="tags"></div>
+            <input type="text" id="input-new-tag" placeholder="Añadir tag...">
+          </div>
+
+          <div class="build-section">
+            <div class="build-item">
+              <label>Runas:</label>
+              <div id="detail-runes" class="runes-list"></div>
+            </div>
+            <div class="build-item">
+              <label>Summoners:</label>
+              <div id="detail-summoners" class="summoners-list"></div>
+            </div>
+            <div class="build-item">
+              <label>Items:</label>
+              <div id="detail-items" class="items-list"></div>
+            </div>
+          </div>
+
+          <div class="notes-section">
+            <label>Notas:</label>
+            <textarea id="detail-notes" rows="8" placeholder="Escribe tus notas sobre este matchup..."></textarea>
+          </div>
+
+          <div class="version-section">
+            <label>Versión:</label>
+            <select id="detail-version"></select>
+            <span id="detail-version-date"></span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-delete-matchup" class="btn-danger">Eliminar</button>
+          <button id="btn-save-matchup" class="btn-primary">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- New Matchup Modal -->
+    <div id="modal-new-matchup" class="modal hidden">
+      <div class="modal-content modal-small">
+        <div class="modal-header">
+          <h2>Nuevo Matchup</h2>
+          <button class="modal-close" id="btn-close-new-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Mi Campeón:</label>
+            <div class="champion-select">
+              <input type="text" id="new-my-champion" placeholder="Buscar campeón..." autocomplete="off">
+              <div id="new-my-champion-dropdown" class="champion-dropdown hidden"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Campeón Enemigo:</label>
+            <div class="champion-select">
+              <input type="text" id="new-enemy-champion" placeholder="Buscar campeón..." autocomplete="off">
+              <div id="new-enemy-champion-dropdown" class="champion-dropdown hidden"></div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Rol:</label>
+            <select id="new-role">
+              <option value="top">Top</option>
+              <option value="jungle">Jungle</option>
+              <option value="mid">Mid</option>
+              <option value="adc">ADC</option>
+              <option value="support">Support</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-cancel-new" class="btn-secondary">Cancelar</button>
+          <button id="btn-create-matchup" class="btn-primary">Crear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Match Detail Modal -->
+    <div id="modal-match" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Detalle de Partida</h2>
+          <button class="modal-close" id="btn-close-match-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="match-info">
+            <div class="match-champions">
+              <img id="match-my-champion-icon" class="champion-icon-large" src="" alt="">
+              <span class="vs">vs</span>
+              <img id="match-enemy-champion-icon" class="champion-icon-large" src="" alt="">
+            </div>
+            <div class="match-result" id="match-result"></div>
+            <div class="match-date" id="match-date"></div>
+          </div>
+
+          <div class="notes-section">
+            <label>Notas de la partida:</label>
+            <textarea id="match-notes" rows="6" placeholder="Escribe tus notas sobre esta partida..."></textarea>
+          </div>
+
+          <div class="link-section">
+            <label>Vincular a matchup:</label>
+            <select id="match-linked-matchup">
+              <option value="">Sin vincular</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="btn-save-match" class="btn-primary">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
